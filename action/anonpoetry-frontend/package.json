@@ -1,0 +1,20 @@
+{
+  "name": "anonpoetry-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AnonPoetry DApp frontend using Vite and real FHEVM mock utils",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "genabi": "node scripts/genabi.mjs"
+  },
+  "dependencies": {
+    "@fhevm/mock-utils": "^0.1.0",
+    "ethers": "^6.15.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^5.4.9"
+  }
+}

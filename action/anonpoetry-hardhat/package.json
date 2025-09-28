@@ -1,0 +1,59 @@
+{
+  "name": "anonpoetry-hardhat",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AnonPoetry Hardhat project using FHEVM",
+  "engines": {
+    "node": ">=20",
+    "npm": ">=7.0.0"
+  },
+  "license": "BSD-3-Clause-Clear",
+  "scripts": {
+    "clean": "rimraf ./fhevmTemp ./artifacts ./cache ./coverage ./types ./coverage.json ./dist",
+    "compile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat compile",
+    "postcompile": "npm run typechain",
+    "coverage": "cross-env SOLIDITY_COVERAGE=true hardhat coverage --temp artifacts --testfiles \"test/**/*.ts\" && npm run typechain",
+    "lint": "npm run lint:sol && npm run lint:ts && npm run prettier:check",
+    "lint:sol": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
+    "lint:ts": "eslint --ignore-path ./.eslintignore --ext .js,.ts .",
+    "prettier:check": "prettier --check \"**/*.{js,json,md,sol,ts,yml}\"",
+    "prettier:write": "prettier --write \"**/*.{js,json,md,sol,ts,yml}\"",
+    "test": "hardhat test",
+    "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain"
+  },
+  "dependencies": {
+    "@fhevm/solidity": "^0.8.0",
+    "@zama-fhe/oracle-solidity": "^0.1.0",
+    "encrypted-types": "^0.0.4"
+  },
+  "devDependencies": {
+    "@fhevm/hardhat-plugin": "^0.1.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",
+    "@nomicfoundation/hardhat-ethers": "^3.1.0",
+    "@nomicfoundation/hardhat-verify": "^2.1.0",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/chai": "^4.3.20",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.19.8",
+    "chai": "^4.5.0",
+    "cross-env": "^7.0.3",
+    "ethers": "^6.15.0",
+    "hardhat": "^2.26.0",
+    "hardhat-deploy": "^0.11.45",
+    "hardhat-gas-reporter": "^2.3.0",
+    "mocha": "^11.7.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-solidity": "^2.1.0",
+    "rimraf": "^6.0.1",
+    "solhint": "^6.0.0",
+    "solidity-coverage": "^0.8.16",
+    "ts-node": "^10.9.2",
+    "typechain": "^8.3.2",
+    "typescript": "^5.8.3"
+  }
+}
+
+
+
+

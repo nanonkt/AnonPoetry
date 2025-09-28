@@ -1,0 +1,9 @@
+# Ignore Node.js dependencies
+node_modules/
+**/node_modules/
+
+# OS and editor files
+.DS_Store
+*.log
+
+

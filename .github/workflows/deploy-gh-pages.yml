@@ -1,0 +1,73 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Determine base path
+        id: base
+        shell: bash
+        run: |
+          REPO="${{ github.repository }}"                 # owner/repo
+          OWNER="${REPO%%/*}"
+          NAME="${REPO##*/}"
+          if [[ "${NAME}" == "${OWNER}.github.io" ]]; then
+            BASE="/"
+          else
+            BASE="/${NAME}"
+          fi
+          echo "base=${BASE}" >> $GITHUB_OUTPUT
+
+      - name: Install deps
+        working-directory: action/anonpoetry-frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Build with inferred base
+        working-directory: action/anonpoetry-frontend
+        run: npx vite build --base "${{ steps.base.outputs.base }}" || npm run build -- --base "${{ steps.base.outputs.base }}"
+
+      - name: Add SPA 404 and .nojekyll
+        working-directory: action/anonpoetry-frontend/dist
+        run: |
+          cp index.html 404.html
+          touch .nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: action/anonpoetry-frontend/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+
